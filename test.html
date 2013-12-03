@@ -9,19 +9,6 @@
 	<link rel="stylesheet" href="css/normalize.css" type="text/css">
 	<link rel="stylesheet" href="css/style.css" type="text/css">	
 	<style type="text/css">
-		body	
-		.spacer {
-			min-height: 100px;
-			border-bottom: 1px dotted #7a7fac;
-		}
-		#ani {
-			color: #FFFFFF;
-			position: relative;
-			display: inline-block;
-			padding-top: 40px;
-			margin-top: 30px;
-			padding-bottom: 100px;
-		}
 		body, html {
 			/*height: 100%;
 			width: 100%;
@@ -29,11 +16,29 @@
 			overflow-x: hidden;
 			overflow-y: scroll;*/
 		}
-		.superscrollorama-pin-spacer {
+		#pin {
+			color: #FFFFFF;
+			position: relative;
+			display: inline-block;
+			background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPjxwYXRoIGQ9Ik0tMiAxMEwxMCAtMlpNMTAgNkw2IDEwWk0tMiAyTDIgLTIiIHN0cm9rZT0iIzIyMiIgc3Ryb2tlLXdpZHRoPSI0LjUiPjwvcGF0aD4KPC9zdmc+"),url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPgo8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgyPSIxIiB5Mj0iMSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGMTkiPjwvc3RvcD4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMENGIj48L3N0b3A+CjwvbGluZWFyR3JhZGllbnQ+CjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZykiPjwvcmVjdD4KPC9zdmc+");
+			width: 200px;
+			height: 400px;
+		}
+		.scene {
+
+		}
+		.scene.one {
+
+		}
+		.scrollmagic-pin-spacer {
 			background-color: #7a7fFF
 		}
 		.simple-demo #content-wrapper {
-			padding: 0;/*
+			height: 100%;
+			top: 400px;
+			padding: 0;
+			margin: 0;
+			/*
 			position: absolute;
 			top: 100px;
 			width: 100%;
@@ -45,23 +50,13 @@
 </head>
 <body class="simple-demo">
 	<div id="content-wrapper">
-
-		<div class="spacer"></div>
-		<div class="spacer"></div>
-		<div class="spacer"></div>
-		<div class="spacer"></div>
-		<div class="spacer" id="trigger">
-			<div id="ani">
+		<div class="topSpacer"></div>
+		<div class="scene one" id="trigger">
+			<div id="pin">
 				TEST
 			</div>
 		</div>
-		<div class="spacer"></div>
-		<div class="spacer"></div>
-		<div class="spacer"></div>
-		<div class="spacer"></div>
-		<div class="spacer"></div>
-		<div class="spacer"></div>
-
+		<div class="bottomSpacer"></div>
 	</div>
 	<script type="text/javascript" src="js/greensock/TweenMax.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -69,27 +64,28 @@
   	<script src="js/jquery.scrollmagic.js"></script>
 	<script>
 		$(document).ready(function($) {
+			$('.topSpacer, .bottomSpacer').height($(window).height());
 			var controller = new ScrollMagic({loglevel: 2, globalSceneOptions: {triggerHook: "onEnter"}});
 			// var controller = new ScrollMagic({scrollContainer: "#content-wrappers"});
-			var scene = controller.addNewScene("#trigger", {duration: 400, offset: -200, loglevel: 2})
-						// .setTween(TweenMax.to("#ani", 1, {color: "red", left: "+=100"}));
+			var scene = controller.addNewScene("#trigger", {duration: 400, offset: -200, loglevel: 3})
+						// .setTween(TweenMax.to("#pin", 1, {color: "red", left: "+=100"}));
 						// .on("progress", function (e) { console.log (e); })
 						.on("change", function (e) { console.log (e); })
 						// .on("start", function (e) { console.log (e); })
 						// .on("end", function (e) { console.log (e); })
 						// .on("enter", function (e) { console.log (e); })
 						// .on("leave", function (e) { console.log (e); })
-						.setTween(TweenMax.to("#ani", .5, {color: "red" }))
-						.setPin("#ani");
+						.setTween(TweenMax.to("#pin", .5, {color: "red" }))
+						.setPin("#pin");
 
 			// console.log(scene);
-			$("#ani").click(function () {
+			$("#pin").click(function () {
 				// scene.duration(scene.duration() - 100);
 				// console.log(controller.scrollDirection());
 				// scene.unbind("change");
 				// scene.remove();
 				scene.duration(scene.duration() - 200);
-				// scene.setTween(new TimelineMax().add(TweenMax.to("#ani", 1, {color: "blue", left: "-=100"})))
+				// scene.setTween(new TimelineMax().add(TweenMax.to("#pin", 1, {color: "blue", left: "-=100"})))
 				// 	 .duration(600)
 				// 	 .setOption({triggerHook: function () {return .5}, offset: 0, smoothTweening: true})
 					 // .removeTween();

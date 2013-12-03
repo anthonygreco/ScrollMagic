@@ -910,13 +910,13 @@ if (!console['warn']) {
 		 *
 		 * @param {(string|object)} element - A Selctor or a jQuery object for the object that is supposed to be pinned.
 		 * @param {object} [settings.pushFollowers=true] - If true following elements will be "pushed" down, if false the pinned element will just scroll past them
-		 * @param {object} [settings.spacerClass="superscrollorama-pin-spacer"] - Classname of the pin spacer element
+		 * @param {object} [settings.spacerClass="scrollmagic-pin-spacer"] - Classname of the pin spacer element
 		 * @returns {ScrollScene} Parent object for chaining.
 		 */
 		this.setPin = function (element, settings) {
 			var defaultSettings = {
 				pushFollowers: true,
-				spacerClass: "superscrollorama-pin-spacer"
+				spacerClass: "scrollmagic-pin-spacer"
 			};
 
 			// validate Element
