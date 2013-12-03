@@ -298,7 +298,7 @@ if (!console['warn']) {
 				} else {
 					newProgress = _currScrollPoint > startPoint ? 1 : 0;
 				}
-				
+
 				// startPoint is neccessary inside the class for the calculation of the fixed position for pins.
 				scene.startPoint = startPoint;
 
@@ -542,6 +542,8 @@ if (!console['warn']) {
 					if (_parent.vertical()) {
 						fixedPosTop = spacerOffset.top - ScrollScene.startPoint;
 						fixedPosLeft = spacerOffset.left;
+						console.log('fixedPosTop = spacerOffset.top - ScrollScene.startPoint', fixedPosTop);
+						console.log('fixedPosLeft = spacerOffset.left', fixedPosLeft);
 					} else {
 						fixedPosTop = spacerOffset.top;
 						fixedPosLeft = spacerOffset.left - ScrollScene.startPoint;
@@ -568,6 +570,7 @@ if (!console['warn']) {
 					var spacer = _pin.parent();
 					if (_parent.vertical()) {
 						spacer.height(_pin.data("startHeight") + _options.duration);
+						console.log('updatePinSpacerSize setting height | _pin.data("startHeight") + _options.duration', _pin.data("startHeight") + _options.duration, '| startHeight '+_pin.data("startHeight")+' duration '+ _options.duration);
 					} else {
 						spacer.width(_pin.data("startWidth") + _options.duration);
 					}
@@ -960,10 +963,13 @@ if (!console['warn']) {
 					});
 			} else {
 				// a little more challenging.
+				var w = parseFloat(_pin.css("width")) + parseFloat(_pin.css("border-left")) + parseFloat(_pin.css("border-right")) + parseFloat(_pin.css("padding-left")) + parseFloat(_pin.css("padding-right")) + parseFloat(_pin.css("margin-left")) + parseFloat(_pin.css("margin-right")),
+				h = parseFloat(_pin.css("height")) + parseFloat(_pin.css("border-top")) + parseFloat(_pin.css("border-bottom")) + parseFloat(_pin.css("padding-top")) + parseFloat(_pin.css("padding-bottom")) + parseFloat(_pin.css("margin-top")) + parseFloat(_pin.css("margin-bottom"));
+				// console.log('setting pin width and height', w, h)
 				spacer.css({
 						display: _pin.css("display"),
-						width: parseFloat(_pin.css("width")) + parseFloat(_pin.css("border-left")) + parseFloat(_pin.css("border-right")) + parseFloat(_pin.css("padding-left")) + parseFloat(_pin.css("padding-right")) + parseFloat(_pin.css("margin-left")) + parseFloat(_pin.css("margin-right")),
-						height: parseFloat(_pin.css("height")) + parseFloat(_pin.css("border-top")) + parseFloat(_pin.css("border-bottom")) + parseFloat(_pin.css("padding-top")) + parseFloat(_pin.css("padding-bottom")) + parseFloat(_pin.css("margin-top")) + parseFloat(_pin.css("margin-bottom"))
+						width: w,
+						height: h
 					});
 			}
 
