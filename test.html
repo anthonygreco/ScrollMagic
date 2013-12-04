@@ -10,6 +10,9 @@
 	<link rel="stylesheet" href="css/style.css" type="text/css">	
 </head>
 <body class="simple-demo">
+	<div id="buttons">
+		<input id="scrollToInput" name="scrollToValue" placeholder="int || element id (without hash)" /> <button id="scrollTo">Scroll</button>
+	</div>
 	<div id="content-wrapper">
 		<div class="topSpacer"></div>
 		<div class="scene" id="one">
@@ -93,6 +96,7 @@
 		<div class="bottomSpacer"></div>
 	</div>
 	<script type="text/javascript" src="js/greensock/TweenMax.min.js"></script>
+	<script type="text/javascript" src="js/greensock/plugins/ScrollToPlugin.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   	<script>window.jQuery || document.write('<script src="js/jquery-1.10.2.min.js"><\/script>')</script>
   	<script src="js/jquery.scrollmagic.js"></script>
@@ -109,10 +113,37 @@
 				top: 0,
 				left:  $(sceneId+' #pin').outerWidth(true)
 			});
+		},
+		// helper testing methods
+		isInt = function(num) {
+			var regEx = /^\d+$/;
+			return regEx.test(num);
+		},
+		handleResize = function() {
+			$('.topSpacer, .bottomSpacer').height($(window).height());
 		};
+		// scroll to click
+		$('button#scrollTo').on('click', function() {
+			var value = $(this).prev().val();
+			if(!isInt(value) && $('#'+value).length > -1) {
+				value = $('#'+value).offset().top;
+			} else if(!isInt(value)) {
+				return false;
+			}
+			switch($(this).prop('id')) {
+				case 'scrollTo':
+					console.log('tweening');
+					TweenMax.to(window, 1.5, {scrollTo: parseInt(value), ease: Quad.easeInOut});
+				break;
+			}
+			return false;
+		});
+		// resize the top spacer on window resize during testing (things are thrown off when opening and then closing the inspector :P)
+		$(window).resize(handleResize);
+		
 		$(function() {
 			// add space to top and bottom of scene so we can test easier
-			$('.topSpacer, .bottomSpacer').height($(window).height());
+			handleResize();
 
 			var controller = new ScrollMagic({loglevel: 2, globalSceneOptions: {triggerHook: 'onEnter'}});
 
@@ -122,7 +153,7 @@
 			// into the setTween and setPin methods so that they can have independent startpoints. in this example i would optimally like
 			// the tween on the pin to start when the entire element has entered the screen i.e. when the element has fully entered teh screen (when the bottom of the element is at
 			// the bottom of the screen) and then pin the element when it's at another point
-			// currently set to 
+			// currently set to 250px from the top of the window
 			offset = 250-$(window).height();
 			console.log('duration', duration);
 			console.log('offset', offset);

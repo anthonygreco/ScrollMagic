@@ -542,8 +542,6 @@ if (!console['warn']) {
 					if (_parent.vertical()) {
 						fixedPosTop = spacerOffset.top - ScrollScene.startPoint;
 						fixedPosLeft = spacerOffset.left;
-						console.log('fixedPosTop = spacerOffset.top - ScrollScene.startPoint', fixedPosTop);
-						console.log('fixedPosLeft = spacerOffset.left', fixedPosLeft);
 					} else {
 						fixedPosTop = spacerOffset.top;
 						fixedPosLeft = spacerOffset.left - ScrollScene.startPoint;
@@ -570,7 +568,6 @@ if (!console['warn']) {
 					var spacer = _pin.parent();
 					if (_parent.vertical()) {
 						spacer.height(_pin.data("startHeight") + _options.duration);
-						console.log('updatePinSpacerSize setting height | _pin.data("startHeight") + _options.duration', _pin.data("startHeight") + _options.duration, '| startHeight '+_pin.data("startHeight")+' duration '+ _options.duration);
 					} else {
 						spacer.width(_pin.data("startWidth") + _options.duration);
 					}
