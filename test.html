@@ -11,13 +11,15 @@
 </head>
 <body class="simple-demo">
 	<div id="buttons">
-		<input id="scrollToInput" name="scrollToValue" placeholder="int || element id (without hash)" /> <button id="scrollTo">Scroll</button>
+		<input id="scrollToInput" name="scrollToValue" placeholder="int || element id (without hash)" /> <button id="scrollTo">Scroll</button> 
+		<input id="scrollToTopInput" name="scrollToTopValue" type="hidden" value="0" /> <button id="scrollToTop">Scroll To Top</button> 
+		<input id="scrollToBottomInput" name="scrollToBottomValue" type="hidden" value="" /> <button id="scrollToBottom">Scroll To Bottom</button>
 	</div>
 	<div id="content-wrapper">
 		<div class="topSpacer"></div>
 		<div class="scene" id="one">
-			<div id="pin">Story snippets from Futurama are great!</div>
-			<div id="content">
+			<div class="pin">Story snippets from Futurama are great!</div>
+			<div class="content">
 				<h1>Brannigan, Begin Again</h1>
 				<p>Michelle, I don't regret this, but I both rue and lament it. You don't know how to do any of those. Tell her she looks thin. You can see how I lived before I met you.</p>
 				<h2>Crimes of the Hot</h2>
@@ -54,11 +56,11 @@
 				<p>Why not indeed! You don't know how to do any of those. Who are those horrible orange men? Bender, being God isn't easy. If you do too much, people get dependent on you, and if you do nothing, they lose hope. You have to use a light touch. Like a safecracker, or a pickpocket. But I know you in the future. I cleaned your poop.</p>
 				<p>Hey! I'm a porno-dealing monster, what do I care what you think? I'm just glad my fat, ugly mama isn't alive to see this day. Well, let's just dump it in the sewer and say we delivered it.</p>
 			</div>
-			<div id="background"></div>
+			<div class="background"></div>
 		</div>
 		<div class="scene" id="two">
-			<div id="pin">Story snippets from Star Wars is even better!</div>
-			<div id="content">
+			<div class="pin">Story snippets from Star Wars is even better!</div>
+			<div class="content">
 				<h1>Imperial Star Destroyer</h1>
 				<p>You don't believe in the Force, do you? I have traced the Rebel spies to her. Now she is my only link to finding their secret base. Kid, I've flown from one side of this galaxy to the other. I've seen a lot of strange stuff, but I've never seen anything to make me believe there's one all-powerful Force controlling everything. There's no mystical energy field that controls my destiny. It's all a lot of simple tricks and nonsense. Alderaan? I'm not going to Alderaan. I've got to go home. It's late, I'm in for it as it is. Red Five standing by.</p>
 				<h2>The Phantom Menace</h2>
@@ -91,7 +93,7 @@
 				<p>Hey, Luke! May the Force be with you. She must have hidden the plans in the escape pod. Send a detachment down to retrieve them, and see to it personally, Commander. There'll be no one to stop us this time! She must have hidden the plans in the escape pod. Send a detachment down to retrieve them, and see to it personally, Commander. There'll be no one to stop us this time! As you wish.</p>
 				<p>Don't underestimate the Force. No! Alderaan is peaceful. We have no weapons. You can't possibly&hellip; Leave that to me. Send a distress signal, and inform the Senate that all on board were killed. I want to come with you to Alderaan. There's nothing for me here now. I want to learn the ways of the Force and be a Jedi, like my father before me. I care. So, what do you think of her, Han? I have traced the Rebel spies to her. Now she is my only link to finding their secret base.</p>
 			</div>
-			<div id="background"></div>
+			<div class="background"></div>
 		</div>
 		<div class="bottomSpacer"></div>
 	</div>
@@ -106,24 +108,21 @@
 			$(sceneId).children().each(function(index, elem) {
 				h = h > $(elem).outerHeight(true) ? h : $(elem).outerHeight(true);
 			});
-			return h-$(sceneId+' #pin').outerHeight(true);
+			return h-$(sceneId+' .pin').outerHeight(true);
 		},
 		setContentPosition = function(sceneId) {
-			$(sceneId+' #content, '+sceneId+' #background').css({
+			$(sceneId).children(':not(.pin)').css({
 				top: 0,
-				left:  $(sceneId+' #pin').outerWidth(true)
+				left:  $(sceneId+' .pin').outerWidth(true)
 			});
 		},
 		// helper testing methods
 		isInt = function(num) {
 			var regEx = /^\d+$/;
 			return regEx.test(num);
-		},
-		handleResize = function() {
-			$('.topSpacer, .bottomSpacer').height($(window).height());
 		};
 		// scroll to click
-		$('button#scrollTo').on('click', function() {
+		$('#buttons button').on('click', function() {
 			var value = $(this).prev().val();
 			if(!isInt(value) && $('#'+value).length > -1) {
 				value = $('#'+value).offset().top;
@@ -132,72 +131,78 @@
 			}
 			switch($(this).prop('id')) {
 				case 'scrollTo':
-					console.log('tweening');
+					// subtract 250 from the top
+					TweenMax.to(window, 1.5, {scrollTo: parseInt(value-250), ease: Quad.easeInOut});
+				break;
+				case 'scrollToTop':
+					TweenMax.to(window, 1.5, {scrollTo: parseInt(value), ease: Quad.easeInOut});
+				break;
+				case 'scrollToBottom':
 					TweenMax.to(window, 1.5, {scrollTo: parseInt(value), ease: Quad.easeInOut});
 				break;
 			}
 			return false;
 		});
-		// resize the top spacer on window resize during testing (things are thrown off when opening and then closing the inspector :P)
-		$(window).resize(handleResize);
 		
 		$(function() {
 			// add space to top and bottom of scene so we can test easier
-			handleResize();
+			$('.topSpacer, .bottomSpacer').height($(window).height());
+
+			$('#scrollToBottomInput').val($(window).height()*4);
 
 			var controller = new ScrollMagic({loglevel: 2, globalSceneOptions: {triggerHook: 'onEnter'}});
 
-			// set the duration equal to the height of the scene
+			// set the duration equal to the largest height of the children within the scene
 			duration = getDurationBySceneHeight('#one');
 			// so this is the offset at which to trigger the pinning AND the animation, right? perhaps we could move the offset property
 			// into the setTween and setPin methods so that they can have independent startpoints. in this example i would optimally like
-			// the tween on the pin to start when the entire element has entered the screen i.e. when the element has fully entered teh screen (when the bottom of the element is at
-			// the bottom of the screen) and then pin the element when it's at another point
+			// the tween on the pin to start when the entire element has entered the screen i.e. when the element has fully entered the
+			// screen (when the bottom of the element is at the bottom of the screen) and then pin the element when it's at another point
 			// currently set to 250px from the top of the window
 			offset = 250-$(window).height();
-			console.log('duration', duration);
-			console.log('offset', offset);
+			// console.log('duration', duration);
+			// console.log('offset', offset);
 			setContentPosition('#one');
 			var scene = controller.addNewScene($('#one'), {duration: duration, offset: offset, loglevel: 2})
-						// .setTween(TweenMax.to('#pin', 1, {color: 'red', left: '+=100'}));
+						// .setTween(TweenMax.to('#one .pin', 1, {color: 'red', left: '+=100'}));
 						// .on('progress', function (e) { console.log (e); })
-						.on('change', function (e) { console.log (e); })
+						// .on('change', function (e) { console.log (e); })
 						// .on('start', function (e) { console.log (e); })
 						// .on('end', function (e) { console.log (e); })
 						// .on('enter', function (e) { console.log (e); })
 						// .on('leave', function (e) { console.log (e); })
-						.setTween(TweenMax.to('#one #pin', .5, {
+						.setTween(TweenMax.to('#one .pin', .5, {
 							color: '#000000',
 							textShadow: '1px 1px 1px rgba(205, 205, 205, 0.85)',
 							backgroundPositionX: -200
 						}))
-						.setPin('#one #pin');
+						.setPin('#one .pin');
 
 			duration = getDurationBySceneHeight('#two');
 			offset = 250-$(window).height();
 			setContentPosition('#two');
 			var scene = controller.addNewScene($('#two'), {duration: duration, offset: offset, loglevel: 2})
-						// .setTween(TweenMax.to('#pin', 1, {color: 'red', left: '+=100'}));
-						// .on('progress', function (e) { console.log (e); })
-						.on('change', function (e) { console.log (e); })
+						// .setTween(TweenMax.to('#two .pin', 1, {color: 'red', left: '+=100'}));
+						// .on('progress', function (e) { console.log ('progress', e); })
+						// .on('change', function (e) { console.log (e); })
 						// .on('start', function (e) { console.log (e); })
 						// .on('end', function (e) { console.log (e); })
 						// .on('enter', function (e) { console.log (e); })
 						// .on('leave', function (e) { console.log (e); })
-						.setTween(TweenMax.to('#two #pin', .5, {
+						.setTween(TweenMax.to('#two .pin', .5, {
 							color: '#000000',
 							textShadow: '1px 1px 1px rgba(205, 205, 205, 0.85)',
 							backgroundPositionX: -200
 						}))
-						.setPin('#two #pin');
-			$('#one #pin').click(function () {
+						.setPin('#two .pin');
+			$('#one .pin').click(function () {
 				// scene.duration(scene.duration() - 100);
 				// console.log(controller.scrollDirection());
 				// scene.unbind('change');
 				// scene.remove();
 				// why would we ever want to do this? perhaps this is just illustrating that it CAN be done
 				// scene.duration(scene.duration() - 200);
-				// scene.setTween(new TimelineMax().add(TweenMax.to('#pin', 1, {color: 'blue', left: '-=100'})))
+				// scene.setTween(new TimelineMax().add(TweenMax.to('#one .pin', 1, {color: 'blue', left: '-=100'})))
 				// 	 .duration(600)
 				// 	 .setOption({triggerHook: function () {return .5}, offset: 0, smoothTweening: true})
 					 // .removeTween();
