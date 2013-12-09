@@ -56,7 +56,9 @@
 				<p>Why not indeed! You don't know how to do any of those. Who are those horrible orange men? Bender, being God isn't easy. If you do too much, people get dependent on you, and if you do nothing, they lose hope. You have to use a light touch. Like a safecracker, or a pickpocket. But I know you in the future. I cleaned your poop.</p>
 				<p>Hey! I'm a porno-dealing monster, what do I care what you think? I'm just glad my fat, ugly mama isn't alive to see this day. Well, let's just dump it in the sewer and say we delivered it.</p>
 			</div>
-			<div class="background"></div>
+			<div class="backgrounds">
+				<div class="bg-1"></div>
+			</div>
 		</div>
 		<div class="scene" id="two">
 			<div class="pin">Story snippets from Star Wars is even better!</div>
@@ -93,7 +95,9 @@
 				<p>Hey, Luke! May the Force be with you. She must have hidden the plans in the escape pod. Send a detachment down to retrieve them, and see to it personally, Commander. There'll be no one to stop us this time! She must have hidden the plans in the escape pod. Send a detachment down to retrieve them, and see to it personally, Commander. There'll be no one to stop us this time! As you wish.</p>
 				<p>Don't underestimate the Force. No! Alderaan is peaceful. We have no weapons. You can't possibly&hellip; Leave that to me. Send a distress signal, and inform the Senate that all on board were killed. I want to come with you to Alderaan. There's nothing for me here now. I want to learn the ways of the Force and be a Jedi, like my father before me. I care. So, what do you think of her, Han? I have traced the Rebel spies to her. Now she is my only link to finding their secret base.</p>
 			</div>
-			<div class="background"></div>
+			<div class="backgrounds">
+				<div class="bg-1"></div>
+			</div>
 		</div>
 		<div class="bottomSpacer"></div>
 	</div>
@@ -129,18 +133,11 @@
 			} else if(!isInt(value)) {
 				return false;
 			}
-			switch($(this).prop('id')) {
-				case 'scrollTo':
-					// subtract 250 from the top
-					TweenMax.to(window, 1.5, {scrollTo: parseInt(value-250), ease: Quad.easeInOut});
-				break;
-				case 'scrollToTop':
-					TweenMax.to(window, 1.5, {scrollTo: parseInt(value), ease: Quad.easeInOut});
-				break;
-				case 'scrollToBottom':
-					TweenMax.to(window, 1.5, {scrollTo: parseInt(value), ease: Quad.easeInOut});
-				break;
+			if($(this).prop('id') === 'scrollTo') {
+				// subtract 250 from the top
+				value = value-250;
 			}
+			TweenMax.to(window, 1.5, {scrollTo: parseInt(value), ease: Quad.easeInOut});
 			return false;
 		});
 		
