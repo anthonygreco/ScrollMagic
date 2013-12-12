@@ -147,38 +147,58 @@
 
 			$('#scrollToBottomInput').val($(window).height()*4);
 
-			var controller = new ScrollMagic({loglevel: 2, globalSceneOptions: {triggerHook: 'onEnter'}});
+			var controller = new ScrollMagic({loglevel: 2});
 
 			// set the duration equal to the largest height of the children within the scene
 			duration = getDurationBySceneHeight('#one');
 			// so this is the offset at which to trigger the pinning AND the animation, right? perhaps we could move the offset property
-			// into the setTween and setPin methods so that they can have independent startpoints. in this example i would optimally like
-			// the tween on the pin to start when the entire element has entered the screen i.e. when the element has fully entered the
-			// screen (when the bottom of the element is at the bottom of the screen) and then pin the element when it's at another point
-			// currently set to 250px from the top of the window
+			// into the setTween and setPin methods so that they can have independent startpoints.
 			offset = 250-$(window).height();
 			// console.log('duration', duration);
 			// console.log('offset', offset);
 			setContentPosition('#one');
-			var scene = controller.addNewScene($('#one'), {duration: duration, offset: offset, loglevel: 2})
+			var sceneOne = controller.addNewScene($('#one'), {duration: duration, offset: offset, triggerHook: 'onEnter', loglevel: 2})
 						// .setTween(TweenMax.to('#one .pin', 1, {color: 'red', left: '+=100'}));
-						// .on('progress', function (e) { console.log (e); })
-						// .on('change', function (e) { console.log (e); })
-						// .on('start', function (e) { console.log (e); })
-						// .on('end', function (e) { console.log (e); })
-						// .on('enter', function (e) { console.log (e); })
-						// .on('leave', function (e) { console.log (e); })
+						// .on('progress', function (e) { console.log ('progress', e); })
+						// .on('change', function (e) { console.log ('change', e); })
+						// .on('start', function (e) { console.log ('start', e); })
+						// .on('end', function (e) { console.log ('end', e); })
+						// .on('enter', function (e) { console.log ('enter', e); })
+						// .on('leave', function (e) { console.log ('leave', e); })
 						.setTween(TweenMax.to('#one .pin', .5, {
 							color: '#000000',
 							textShadow: '1px 1px 1px rgba(205, 205, 205, 0.85)',
-							backgroundPositionX: -200
 						}))
 						.setPin('#one .pin');
+
+			var subSceneOneEnter = controller.addNewScene($('#one .pin'), {duration: $(window).height(), offset: 0, triggerHook: 'onEnter', loglevel: 2})
+						// .setTween(TweenMax.to('#one .pin', 1, {color: 'red', left: '+=100'}));
+						// .on('progress', function (e) { console.log ('progress', e); })
+						// .on('change', function (e) { console.log ('change', e); })
+						// .on('start', function (e) { console.log ('start', e); })
+						// .on('end', function (e) { console.log ('end', e); })
+						// .on('enter', function (e) { console.log ('enter', e); })
+						// .on('leave', function (e) { console.log ('leave', e); })
+						.setTween(TweenMax.to('#one .pin', .5, {
+							backgroundPositionX: -200
+						}));
+
+			var subSceneOneLeave = controller.addNewScene($('#one .pin'), {duration: $(window).height(), offset: 250, loglevel: 2, triggerHook: 'onLeave'})
+						// .setTween(TweenMax.to('#one .pin', 1, {color: 'red', left: '+=100'}));
+						// .on('progress', function (e) { console.log ('progress', e); })
+						// .on('change', function (e) { console.log ('change', e); })
+						// .on('start', function (e) { console.log ('start', e); })
+						// .on('end', function (e) { console.log ('end', e); })
+						// .on('enter', function (e) { console.log ('enter', e); })
+						// .on('leave', function (e) { console.log ('leave', e); })
+						.setTween(TweenMax.to('#one .pin', .5, {
+							opacity: -0.25
+						}));
 
 			duration = getDurationBySceneHeight('#two');
 			offset = 250-$(window).height();
 			setContentPosition('#two');
-			var scene = controller.addNewScene($('#two'), {duration: duration, offset: offset, loglevel: 2})
+			var sceneTwo = controller.addNewScene($('#two'), {duration: duration, offset: offset, triggerHook: 'onEnter', loglevel: 2})
 						// .setTween(TweenMax.to('#two .pin', 1, {color: 'red', left: '+=100'}));
 						// .on('progress', function (e) { console.log ('progress', e); })
 						// .on('change', function (e) { console.log (e); })
@@ -189,7 +209,6 @@
 						.setTween(TweenMax.to('#two .pin', .5, {
 							color: '#000000',
 							textShadow: '1px 1px 1px rgba(205, 205, 205, 0.85)',
-							backgroundPositionX: -200
 						}))
 						.setPin('#two .pin');
 			$('#one .pin').click(function () {
