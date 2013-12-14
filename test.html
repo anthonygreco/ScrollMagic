@@ -246,15 +246,16 @@
 					ease: Quad.easeInOut
 				}));
 
-			offset = 250-$(window).height();
-			setContentPosition('#two');
-			duration = getSceneHeight('#two', true);
-			var sceneTwo = controller.addNewScene($('#two'), {duration: duration, offset: offset, triggerHook: 'onEnter'})
-				.setTween(TweenMax.to('#two .pin', .5, {
-					color: '#000000',
-					textShadow: '1px 1px 1px rgba(205, 205, 205, 0.85)',
-				}))
-				.setPin('#two .pin');
+			// offset = 250-$(window).height();
+			// setContentPosition('#two');
+			// duration = getSceneHeight('#two', true);
+			// var sceneTwo = controller.addNewScene($('#two'), {duration: duration, offset: offset, triggerHook: 'onEnter'})
+			// 	.setTween(TweenMax.to('#two .pin', .5, {
+			// 		color: '#000000',
+			// 		textShadow: '1px 1px 1px rgba(205, 205, 205, 0.85)',
+			// 	}))
+			// 	.setPin('#two .pin');
+			
 			$('#one .pin').click(function () {
 				// scene.duration(scene.duration() - 100);
 				// console.log(controller.scrollDirection());
